@@ -12,6 +12,21 @@ static ScreenCaptureApi *api = nullptr;
 
 op::Wrapper opWrapper{op::ThreadManagerMode::Asynchronous};
 
+int screenWidth = -1;
+int screenHeight = -1;
+
+bool isRecordResult = false;
+
+std::string getTimeString()
+{
+    std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+    char time[32];
+    std::strftime(time, sizeof(time), "%Y%m%d-%H%M%S", std::localtime(&now));
+
+    return time;
+}
+
 bool processImage(cv::Mat &cvImageToProcess)
 {
     auto datumsPtr = std::make_shared<std::vector<std::shared_ptr<op::Datum>>>();
@@ -47,12 +62,16 @@ class AimbotSpi : public ScreenCaptureSpi
     {
         auto mat = cv::imdecode(std::vector<unsigned char>(data, data + length),
                                 cv::IMREAD_COLOR);
-        processImage(mat)
+        processImage(mat);
     }
 
     void onImageRtn(unsigned char *data, int length) override {}
 
-    void onConnectRspRtn(int imgWidth, int imgHeight) override {}
+    void onConnectRspRtn(int imgWidth, int imgHeight) override
+    {
+        screenWidth = imgWidth;
+        screenHeight = imgHeight;
+    }
 
     void onStartQueryScreenStreamRspRtn(const char *msg) override {}
 
@@ -63,6 +82,8 @@ class AimbotSpi : public ScreenCaptureSpi
         std::chrono::steady_clock::now();
 
 } mySpi;
+
+using namespace std::literals::chrono_literals;
 
 int main()
 {
@@ -81,6 +102,21 @@ int main()
     opWrapper.start();
 
     std::shared_ptr<std::vector<std::shared_ptr<op::Datum>>> result;
+
+    while(screenWidth == -1 && screenHeight == -1) {
+        std::this_thread::sleep_for(100ms);
+    }
+
+    cv::VideoWriter out;
+    if (isRecordResult) {
+        std::string outFileName = getTimeString() + ".mpg";
+        auto ret = out.open(
+            outFileName,
+            CV_FOURCC('D', 'I', 'V', 'X'),
+            10.0,
+            cv::Size(screenWidth, screenHeight),
+            true);
+    }
 
     while (true) {
         if (!opWrapper.waitAndPop(result)) {
@@ -106,8 +142,11 @@ int main()
                 SetCursorPos(x, y);
             }
         }
-
+        if (isRecordResult) {
+            out << cvMat;
+        }
         cv::imshow("OpenPoseResult", cvMat);
+        
         if (cv::waitKey(1) == 'q') {
             break;
         }
@@ -115,6 +154,7 @@ int main()
 
     api->stopQueryScreenStream();
     api->disconnect();
-
+    using namespace std::literals::chrono_literals;
+    std::this_thread::sleep_for(3s);
     return 0;
 }
