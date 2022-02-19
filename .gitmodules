@@ -1,3 +1,6 @@
 [submodule "ScreenCaptureService"]
 	path = ScreenCaptureService
 	url = https://github.com/andywang0607/ScreenCaptureService.git
+[submodule "openpose"]
+	path = openpose
+	url = https://github.com/CMU-Perceptual-Computing-Lab/openpose.git
