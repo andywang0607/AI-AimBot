@@ -1,0 +1,43 @@
+Checks: '-*,
+clang-analyzer-core*,clang-analyzer-cplusplus*,clang-analyzer-unix*,performance-*,
+readability-*,misc-*,
+modernize-avoid-bind,modernize-make-shared,modernize-pass-by-value,modernize-redundant-void-arg,modernize-use-auto,modernize-use-bool-literals,modernize-use-emplace,modernize-use-equals-default,modernize-use-equals-delete,modernize-use-nullptr,modernize-use-override,modernize-use-using,
+-misc-non-private-member-variables-in-classes,-readability-magic-numbers,-readability-named-parameter,-misc-unused-parameters,-modernize-pass-by-value'
+
+CheckOptions:
+  - key:             readability-identifier-naming.NamespaceCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.ClassConstantCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.StructCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.EnumCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.UnionCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.StaticConstantCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.ConstantMemberCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.TemplateParameterCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.TemplateParameterSuffix
+    value:           _T
+
+  - key:             readability-identifier-naming.FunctionCase
+    value:           camelBack
+  - key:             readability-identifier-naming.ParameterCase
+    value:           camelBack
+  - key:             readability-identifier-naming.VariableCase
+    value:           camelBack
+
+  - key:             readability-identifier-naming.PrivateMemberSuffix
+    value:           _
+  - key:             misc-non-private-member-variables-in-classes.IgnorePublicMemberVariables
+    value:           1
+  - key:             readability-implicit-bool-conversion.AllowIntegerConditions
+    value:           1
+  - key:             readability-implicit-bool-conversion.AllowPointerConditions
+    value:           1

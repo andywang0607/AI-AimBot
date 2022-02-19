@@ -6,4 +6,4 @@ mkdir ..\%1
 cd ..\%1
 
 cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=%1 ..
-cmake --build . --config %1 --target INSTALL
+cmake --build . --config %1 --target install
