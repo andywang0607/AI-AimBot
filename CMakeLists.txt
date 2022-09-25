@@ -32,7 +32,7 @@ if(NOT ${CMAKE_BUILD_TYPE} MATCHES "Debug")
     openpose
     INTERFACE
       ${OPENPOSE_BINARY_DIR}/src/openpose/${CMAKE_BUILD_TYPE}/openpose.lib)
-elseif()
+else()
   target_link_libraries(
     openpose
     INTERFACE
